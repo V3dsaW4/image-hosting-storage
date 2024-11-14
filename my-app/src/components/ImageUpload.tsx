@@ -18,7 +18,7 @@ function ImageUpload() {
     formData.append('file', selectedFile());
 
     try {
-      const response = await fetch('https://image-hosting-storage.wwl158.workers.dev/', {
+      const response = await fetch('https://image-hosting-storage.wwl158.workers.dev/upload', {
         method: 'POST',
         body: formData,
       });
