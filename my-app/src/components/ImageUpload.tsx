@@ -3,7 +3,7 @@ import { createSignal } from 'solid-js';
 function ImageUpload() {
   const [selectedFile, setSelectedFile] = createSignal(null);
 
-  const handleFileChange = (event) => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files[0];
     setSelectedFile(file);
   };
@@ -15,7 +15,7 @@ function ImageUpload() {
     }
 
     const formData = new FormData();
-    formData.append('file', selectedFile());
+    formData.append('file', file);
 
     try {
       const response = await fetch('https://image-hosting-storage.wwl158.workers.dev/upload', {
