@@ -1,10 +1,11 @@
 import { createSignal } from 'solid-js';
 
 function ImageUpload() {
-  const [selectedFile, setSelectedFile] = createSignal(null);
+  const [selectedFile, setSelectedFile] = createSignal<File | null>(null);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files[0];
+  const handleFileChange = (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    const file = target.files ? target.files[0] : null;
     setSelectedFile(file);
   };
 
@@ -15,7 +16,7 @@ function ImageUpload() {
     }
 
     const formData = new FormData();
-    formData.append('file', File);
+    formData.append('file', selectedFile() as Blob); // 确保 selectedFile() 返回的是文件
 
     try {
       const response = await fetch('https://image-hosting-storage.wwl158.workers.dev/upload', {
