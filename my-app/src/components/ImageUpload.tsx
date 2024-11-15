@@ -4,10 +4,11 @@ function ImageUpload() {
   const [selectedFile, setSelectedFile] = createSignal<File | null>(null)
 
   const handleFileChange = (event: Event) => {
-    const input = event.target as HTMLInputElement
-    const file = input?.files?.[0] // 获取第一个文件
-    setSelectedFile(file)
+    const input = event.target as HTMLInputElement;
+    const file = input?.files?.[0] ?? null; // 确保如果没有文件，则是 null
+    setSelectedFile(file); // 传递 null 或者 File
   }
+
 
   const handleUpload = async () => {
     if (!selectedFile()) {
