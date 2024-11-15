@@ -1,10 +1,11 @@
 import { createSignal } from 'solid-js'
 
 function ImageUpload() {
-  const [selectedFile, setSelectedFile] = createSignal(null)
+  const [selectedFile, setSelectedFile] = createSignal<File | null>(null)
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0]
+  const handleFileChange = (event: Event) => {
+    const input = event.target as HTMLInputElement
+    const file = input?.files?.[0] // 获取第一个文件
     setSelectedFile(file)
   }
 
@@ -15,7 +16,7 @@ function ImageUpload() {
     }
 
     const formData = new FormData()
-    formData.append('file', selectedFile())
+    formData.append('file', selectedFile() as Blob) // 确保传递文件为 Blob 类型
 
     try {
       const response = await fetch('https://image-hosting-storage.wwl158.workers.dev/upload', {
@@ -26,7 +27,7 @@ function ImageUpload() {
       if (response.ok) {
         const result = await response.json()
         console.log('result', result)
-        window.alert('上传成功')
+        alert('上传成功')
       } else {
         console.error('Upload failed. HTTP status:', response.status)
       }
@@ -44,7 +45,6 @@ function ImageUpload() {
         onChange={handleFileChange}
         class="mb-4"
       />
-
       <button onClick={handleUpload} class="bg-blue-500 text-white py-2 px-4 rounded">
         Upload Image
       </button>
