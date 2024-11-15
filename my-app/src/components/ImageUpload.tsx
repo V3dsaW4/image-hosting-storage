@@ -1,40 +1,39 @@
-import { createSignal } from 'solid-js';
+import { createSignal } from 'solid-js'
 
 function ImageUpload() {
-  const [selectedFile, setSelectedFile] = createSignal<File | null>(null);
+  const [selectedFile, setSelectedFile] = createSignal(null)
 
-  const handleFileChange = (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    const file = target.files ? target.files[0] : null;
-    setSelectedFile(file);
-  };
+  const handleFileChange = (event) => {
+    const file = event.target.files[0]
+    setSelectedFile(file)
+  }
 
   const handleUpload = async () => {
     if (!selectedFile()) {
-      alert('Please select a file first');
-      return;
+      alert('Please select a file first')
+      return
     }
 
-    const formData = new FormData();
-    formData.append('file', selectedFile() as Blob); // 确保 selectedFile() 返回的是文件
+    const formData = new FormData()
+    formData.append('file', selectedFile())
 
     try {
       const response = await fetch('https://image-hosting-storage.wwl158.workers.dev/upload', {
         method: 'POST',
         body: formData,
-      });
+      })
 
       if (response.ok) {
-        const result = await response.json();
-        console.log('result', result);
-        alert('上传成功');
+        const result = await response.json()
+        console.log('result', result)
+        window.alert('上传成功')
       } else {
-        console.error('Upload failed. HTTP status:', response.status);
+        console.error('Upload failed. HTTP status:', response.status)
       }
     } catch (error) {
-      console.error('Error during upload:', error);
+      console.error('Error during upload:', error)
     }
-  };
+  }
 
   return (
     <div class="max-w-screen-md mx-auto p-4">
@@ -45,11 +44,12 @@ function ImageUpload() {
         onChange={handleFileChange}
         class="mb-4"
       />
+
       <button onClick={handleUpload} class="bg-blue-500 text-white py-2 px-4 rounded">
-        上传
+        Upload Image
       </button>
     </div>
-  );
+  )
 }
 
-export default ImageUpload;
+export default ImageUpload
